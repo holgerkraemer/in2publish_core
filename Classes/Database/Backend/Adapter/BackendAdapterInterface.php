@@ -1,5 +1,5 @@
 <?php
-namespace In2code\In2publishCore\Database;
+namespace In2code\In2publishCore\Database\Backend\Adapter;
 
 /***************************************************************
  * Copyright notice
@@ -27,37 +27,14 @@ namespace In2code\In2publishCore\Database;
  ***************************************************************/
 
 /**
- * Class RecordQuery
+ * Interface DatabaseAdapterInterface
  */
-class RecordQuery
+interface BackendAdapterInterface
 {
     /**
-     * @var string
-     */
-    protected $table = '';
-
-    /**
-     * @var array
-     */
-    protected $identifier = [];
-
-    /**
-     * RecordQuery constructor.
+     * BackendAdapterInterface constructor.
      *
-     * @param string $table
-     * @param array $identifier
+     * @param object $connection Actual backend
      */
-    public function __construct($table, array $identifier)
-    {
-        $this->table = $table;
-        $this->identifier = $identifier;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTable()
-    {
-        return $this->table;
-    }
+    public function __construct($connection);
 }

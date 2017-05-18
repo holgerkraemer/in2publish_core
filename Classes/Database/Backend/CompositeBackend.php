@@ -1,5 +1,5 @@
 <?php
-namespace In2code\In2publishCore\Database;
+namespace In2code\In2publishCore\Database\Backend;
 
 /***************************************************************
  * Copyright notice
@@ -26,21 +26,32 @@ namespace In2code\In2publishCore\Database;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use In2code\In2publishCore\Domain\Model\Record;
-use In2code\In2publishCore\Domain\Model\RecordInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use In2code\In2publishCore\Database\Backend\Adapter\BackendAdapterInterface;
 
 /**
- * Class SplitDatabase
+ * Class CompositeBackend
  */
-class SplitDatabase
+class CompositeBackend
 {
     /**
-     * @param RecordQuery $recordQuery
-     * @return RecordInterface
+     * @var BackendAdapterInterface
      */
-    public function executeQuery(RecordQuery $recordQuery)
+    protected $localAdapter = null;
+
+    /**
+     * @var BackendAdapterInterface
+     */
+    protected $foreignAdapter = null;
+
+    /**
+     * CompositeBackend constructor.
+     *
+     * @param BackendAdapterInterface $localAdapter
+     * @param BackendAdapterInterface $foreignAdapter
+     */
+    public function __construct(BackendAdapterInterface $localAdapter, BackendAdapterInterface $foreignAdapter)
     {
-        return GeneralUtility::makeInstance(Record::class, $recordQuery->getTable(), [], [], [], []);
+        $this->localAdapter = $localAdapter;
+        $this->foreignAdapter = $foreignAdapter;
     }
 }

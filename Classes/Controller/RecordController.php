@@ -27,8 +27,10 @@ namespace In2code\In2publishCore\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use In2code\In2publishCore\Database\Factory\DatabaseFactory;
 use In2code\In2publishCore\Domain\Service\TcaService;
 use In2code\In2publishCore\Utility\ConfigurationUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
