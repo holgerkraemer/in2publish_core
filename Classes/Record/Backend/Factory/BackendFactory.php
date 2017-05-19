@@ -1,5 +1,5 @@
 <?php
-namespace In2code\In2publishCore\Database\Backend\Factory;
+namespace In2code\In2publishCore\Record\Backend\Factory;
 
 /***************************************************************
  * Copyright notice
@@ -26,9 +26,9 @@ namespace In2code\In2publishCore\Database\Backend\Factory;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use In2code\In2publishCore\Database\Backend\Adapter\DbalAdapter;
-use In2code\In2publishCore\Database\Backend\Adapter\DbcAdapter;
-use In2code\In2publishCore\Database\Backend\CompositeBackend;
+use In2code\In2publishCore\Record\Backend\Adapter\DbalAdapter;
+use In2code\In2publishCore\Record\Backend\Adapter\DbcAdapter;
+use In2code\In2publishCore\Record\Backend\CompositeBackend;
 use In2code\In2publishCore\Service\Environment\ForeignEnvironmentService;
 use In2code\In2publishCore\Utility\ConfigurationUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -78,17 +78,18 @@ class BackendFactory
             $databaseConfig = ConfigurationUtility::getConfiguration('database.foreign');
 
             $GLOBALS['TYPO3_CONF_VARS']['DB']['TableMapping']['in2publish_foreign'] = 'in2publish_foreign';
-            $GLOBALS['TYPO3_CONF_VARS']['DB']['in2publish_foreign'] = [
+            $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['in2publish_foreign'] = [
                 'charset' => 'utf8',
                 'dbname' => $databaseConfig['name'],
                 'driver' => 'mysqli',
                 'host' => $databaseConfig['hostname'],
                 'password' => $databaseConfig['password'],
                 'user' => $databaseConfig['username'],
-                'initCommands' => $this->getInitCommands(),
+                'initCommands' => $this->getInitCommandString(),
             ];
-        } elseif (!isset($GLOBALS['TYPO3_CONF_VARS']['DB']['in2publish_foreign']['initCommands'])) {
-            $GLOBALS['TYPO3_CONF_VARS']['DB']['in2publish_foreign']['initCommands'] = $this->getInitCommands();
+        } elseif (!isset($GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['in2publish_foreign']['initCommands'])) {
+            $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['in2publish_foreign']['initCommands'] = $this->getInitCommandString(
+            );
         }
 
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('in2publish_foreign');
@@ -132,5 +133,16 @@ class BackendFactory
     protected function getInitCommands()
     {
         return GeneralUtility::makeInstance(ForeignEnvironmentService::class)->getDatabaseInitializationCommands();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getInitCommandString()
+    {
+        return implode(
+            LF,
+            GeneralUtility::makeInstance(ForeignEnvironmentService::class)->getDatabaseInitializationCommands()
+        );
     }
 }

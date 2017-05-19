@@ -25,6 +25,9 @@ namespace In2code\In2publishCore\Domain\Service\Processor;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use In2code\In2publishCore\Domain\Model\RecordInterface;
+use In2code\In2publishCore\Record\Query\RecordSelectQuery;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 /**
  * Interface ProcessorInterface
@@ -76,4 +79,21 @@ interface ProcessorInterface
      * @return array
      */
     public function getLastReasons();
+
+    /**
+     * Returns a RecordSelectQuery which is to be used to retrieve the related record
+     *
+     * @param RecordInterface $record
+     * @param array $column
+     * @return RecordSelectQuery
+     */
+    public function createQuery(RecordInterface $record, array $column);
+
+    /**
+     * @param RecordInterface $record
+     * @param array $column
+     * @param QueryBuilder $queryBuilder
+     * @return mixed
+     */
+    public function expandQuery(RecordInterface $record, array $column, QueryBuilder $queryBuilder);
 }

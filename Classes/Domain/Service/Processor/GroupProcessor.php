@@ -26,7 +26,9 @@ namespace In2code\In2publishCore\Domain\Service\Processor;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use In2code\In2publishCore\Domain\Model\RecordInterface;
 use In2code\In2publishCore\Domain\Service\TcaService;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -168,5 +170,17 @@ class GroupProcessor extends AbstractProcessor
             }
         }
         return true;
+    }
+
+    /**
+     * @param RecordInterface $record
+     * @param array $column
+     * @param QueryBuilder[] $queryBuilders
+     */
+    public function expandQuery(RecordInterface $record, array $column, array $queryBuilders)
+    {
+        foreach (explode(',', $column['allowed']) as $table) {
+            $queryBuilders[$table]->orWhere($record->getLocalProperty($column['propertyName']));
+        }
     }
 }

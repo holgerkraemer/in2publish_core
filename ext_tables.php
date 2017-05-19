@@ -22,6 +22,9 @@ call_user_func(
             $isModuleM1Enabled = \In2code\In2publishCore\Utility\ConfigurationUtility::getConfiguration('module.m1');
             $isModuleM3Enabled = \In2code\In2publishCore\Utility\ConfigurationUtility::getConfiguration('module.m3');
             $isModuleM4Enabled = \In2code\In2publishCore\Utility\ConfigurationUtility::getConfiguration('module.m4');
+            $isOverviewModuleEnabled = \In2code\In2publishCore\Utility\ConfigurationUtility::getConfiguration(
+                'module.overview'
+            );
 
             // initialize logging with configuration
             if (\In2code\In2publishCore\Utility\ConfigurationUtility::isConfigurationLoadedSuccessfully()) {
@@ -86,6 +89,23 @@ call_user_func(
                             'access' => 'user,group',
                             'icon' => 'EXT:' . $extKey . '/Resources/Public/Icons/Record.svg',
                             'labels' => 'LLL:EXT:' . $extKey . '/Resources/Private/Language/locallang_mod1.xlf',
+                        )
+                    );
+                }
+
+                if ($isOverviewModuleEnabled) {
+                    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+                        'In2code.' . $extKey,
+                        'web',
+                        'overview',
+                        '',
+                        array(
+                            'Overview' => 'show',
+                        ),
+                        array(
+                            'access' => 'user,group',
+                            'icon' => 'EXT:in2publish_core/Resources/Public/Icons/Record.svg',
+                            'labels' => 'LLL:EXT:in2publish_core/Resources/Private/Language/locallang_module_overview.xlf',
                         )
                     );
                 }
@@ -168,7 +188,10 @@ call_user_func(
                     false
                 );
 
-                if (false === \In2code\In2publishCore\Utility\ConfigurationUtility::getConfiguration('factory.fal.reserveSysFileUids')) {
+                if (false === \In2code\In2publishCore\Utility\ConfigurationUtility::getConfiguration(
+                        'factory.fal.reserveSysFileUids'
+                    )
+                ) {
                     $indexPostProcessor = 'In2code\\In2publishCore\\Domain\\PostProcessing\\FalIndexPostProcessor';
                 } else {
                     $indexPostProcessor = 'In2code\\In2publishCore\\Domain\\PostProcessing\\FileIndexPostProcessor';

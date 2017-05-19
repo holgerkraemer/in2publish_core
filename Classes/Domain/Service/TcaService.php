@@ -30,12 +30,13 @@ use In2code\In2publishCore\Domain\Service\Processor\AbstractProcessor;
 use In2code\In2publishCore\Utility\ConfigurationUtility;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class TcaService
  */
-class TcaService
+class TcaService implements SingletonInterface
 {
     const COLUMNS = 'columns';
     const CONFIG = 'config';
@@ -68,7 +69,7 @@ class TcaService
         'select' => 'In2code\\In2publishCore\\Domain\\Service\\Processor\\SelectProcessor',
         'text' => 'In2code\\In2publishCore\\Domain\\Service\\Processor\\TextProcessor',
         'user' => 'In2code\\In2publishCore\\Domain\\Service\\Processor\\UserProcessor',
-        'imageManipulation' => 'In2code\\In2publishCore\\Domain\\Service\\Processor\\ImageManipulationProcessor'
+        'imageManipulation' => 'In2code\\In2publishCore\\Domain\\Service\\Processor\\ImageManipulationProcessor',
     );
 
     /**
@@ -110,7 +111,7 @@ class TcaService
     /**
      * TcaService constructor.
      */
-    protected function __construct()
+    public function __construct()
     {
         $this->logger = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Log\\LogManager')->getLogger(get_class($this));
         $this->cache = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')->getCache(
@@ -136,18 +137,6 @@ class TcaService
                 $this->processors[$type] = new $class();
             }
         }
-    }
-
-    /**
-     * @return TcaService
-     */
-    public static function getInstance()
-    {
-        if (self::$instance === null) {
-            self::$instance = new self;
-            self::$instance->preProcessTca();
-        }
-        return self::$instance;
     }
 
     /**
@@ -239,7 +228,7 @@ class TcaService
      */
     public static function getIncompatibleTca()
     {
-        return self::getInstance()->incompatibleTca;
+        return GeneralUtility::makeInstance(TcaService::class)->incompatibleTca;
     }
 
     /**
@@ -247,7 +236,7 @@ class TcaService
      */
     public static function getCompatibleTca()
     {
-        return self::getInstance()->compatibleTca;
+        return GeneralUtility::makeInstance(TcaService::class)->compatibleTca;
     }
 
     /**
@@ -255,7 +244,7 @@ class TcaService
      */
     public static function getControls()
     {
-        return self::getInstance()->controls;
+        return GeneralUtility::makeInstance(TcaService::class)->controls;
     }
 
     /**
@@ -300,7 +289,7 @@ class TcaService
      */
     public static function getColumnsFor($table)
     {
-        return (array)self::getInstance()->compatibleTca[$table];
+        return (array)GeneralUtility::makeInstance(TcaService::class)->compatibleTca[$table];
     }
 
     /**
@@ -309,7 +298,7 @@ class TcaService
      */
     public static function getControlsFor($table)
     {
-        return self::getInstance()->controls[$table];
+        return GeneralUtility::makeInstance(TcaService::class)->controls[$table];
     }
 
     /**
@@ -318,7 +307,7 @@ class TcaService
      */
     public static function hasDeleteField($table)
     {
-        return (self::getInstance()->controls[$table][self::DELETE] !== '');
+        return (GeneralUtility::makeInstance(TcaService::class)->controls[$table][self::DELETE] !== '');
     }
 
     /**
@@ -327,7 +316,7 @@ class TcaService
      */
     public static function getDeleteField($table)
     {
-        return self::getInstance()->controls[$table][self::DELETE];
+        return GeneralUtility::makeInstance(TcaService::class)->controls[$table][self::DELETE];
     }
 
     /**
@@ -336,5 +325,14 @@ class TcaService
     public function flushCaches()
     {
         $this->cache->flush();
+    }
+
+    /**
+     * @param string $type
+     * @return AbstractProcessor
+     */
+    public function getProcessor($type)
+    {
+        return $this->processors[$type];
     }
 }

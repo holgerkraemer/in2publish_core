@@ -192,7 +192,7 @@ class ToolsController extends AbstractController
      */
     public function clearTcaCachesAction()
     {
-        TcaService::getInstance()->flushCaches();
+        GeneralUtility::makeInstance(TcaService::class)->flushCaches();
         $this->redirect('index');
     }
 

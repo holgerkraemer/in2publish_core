@@ -1,5 +1,5 @@
 <?php
-namespace In2code\In2publishCore\Database\Backend;
+namespace In2code\In2publishCore\Record\Backend;
 
 /***************************************************************
  * Copyright notice
@@ -26,7 +26,10 @@ namespace In2code\In2publishCore\Database\Backend;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use In2code\In2publishCore\Database\Backend\Adapter\BackendAdapterInterface;
+use In2code\In2publishCore\Record\Backend\Adapter\BackendAdapterInterface;
+use In2code\In2publishCore\Record\Query\RecordSelectQuery;
+use In2code\In2publishCore\Record\Query\RecordSelectResult;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class CompositeBackend
@@ -53,5 +56,21 @@ class CompositeBackend
     {
         $this->localAdapter = $localAdapter;
         $this->foreignAdapter = $foreignAdapter;
+    }
+
+    /**
+     * @param RecordSelectQuery $recordSelectQuery
+     * @return RecordSelectResult
+     */
+    public function select(RecordSelectQuery $recordSelectQuery)
+    {
+        $localProperties = $this->localAdapter->select($recordSelectQuery);
+        $foreignProperties = $this->foreignAdapter->select($recordSelectQuery);
+        $result = GeneralUtility::makeInstance(
+            RecordSelectResult::class,
+            $localProperties,
+            $foreignProperties
+        );
+        return $result;
     }
 }

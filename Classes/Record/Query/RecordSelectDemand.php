@@ -1,5 +1,5 @@
 <?php
-namespace In2code\In2publishCore\Database\Backend\Adapter;
+namespace In2code\In2publishCore\Record\Query;
 
 /***************************************************************
  * Copyright notice
@@ -26,25 +26,46 @@ namespace In2code\In2publishCore\Database\Backend\Adapter;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Database\DatabaseConnection;
+use In2code\In2publishCore\Domain\Model\RecordInterface;
 
 /**
- * Adapter for the good ol' TYPO3_DB
+ * Class RecordSelectDemand
  */
-class DbcAdapter implements BackendAdapterInterface
+class RecordSelectDemand
 {
     /**
-     * @var DatabaseConnection
+     * @var RecordInterface
      */
-    protected $connection = null;
+    protected $parent = null;
 
     /**
-     * DbalAdapter constructor.
-     *
-     * @param DatabaseConnection $connection
+     * @var string
      */
-    public function __construct($connection)
+    protected $table = '';
+
+    /**
+     * RecordSelectDemand constructor.
+     *
+     * @param string $table
+     */
+    public function __construct($table)
     {
-        $this->connection = $connection;
+        $this->table = $table;
+    }
+
+    /**
+     * @param array $relatedRecords
+     */
+    public function fulfil(array $relatedRecords)
+    {
+        $this->parent->addRelatedRecords($relatedRecords);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTable(): string
+    {
+        return $this->table;
     }
 }

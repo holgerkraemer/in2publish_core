@@ -27,7 +27,6 @@ namespace In2code\In2publishCore\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use In2code\In2publishCore\Database\Factory\DatabaseFactory;
 use In2code\In2publishCore\Domain\Service\TcaService;
 use In2code\In2publishCore\Utility\ConfigurationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -48,7 +47,7 @@ class RecordController extends AbstractController
     public function indexAction()
     {
         $this->logger->debug('Called ' . __FUNCTION__);
-        TcaService::getInstance();
+        GeneralUtility::makeInstance(TcaService::class);
         if (!ConfigurationUtility::getConfiguration('factory.simpleOverviewAndAjax')) {
             $record = $this->commonRepository->findByIdentifier($this->pid);
         } else {

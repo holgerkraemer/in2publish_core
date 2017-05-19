@@ -1,5 +1,5 @@
 <?php
-namespace In2code\In2publishCore\Database;
+namespace In2code\In2publishCore\Record\Query;
 
 /***************************************************************
  * Copyright notice
@@ -26,25 +26,46 @@ namespace In2code\In2publishCore\Database;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use In2code\In2publishCore\Database\Backend\CompositeBackend;
-use In2code\In2publishCore\Database\Backend\Factory\BackendFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 /**
- * Class RecordRepository
+ * Class RecordQuery
  */
-class RecordRepository
+class RecordSelectQuery
 {
     /**
-     * @var CompositeBackend
+     * @var string
      */
-    protected $backend = null;
+    protected $table = '';
 
     /**
-     * RecordRepository constructor.
+     * @var array
      */
-    public function __construct()
+    protected $identifiers = [];
+
+    /**
+     * RecordQuery constructor.
+     *
+     * @param string $table
+     * @param array $identifiers
+     */
+    public function __construct($table, array $identifiers)
     {
-        $this->backend = GeneralUtility::makeInstance(BackendFactory::class)->instantiateBackend();
+        $this->table = $table;
+        $this->identifiers = $identifiers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTable()
+    {
+        return $this->table;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIdentifiers()
+    {
+        return $this->identifiers;
     }
 }

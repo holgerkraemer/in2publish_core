@@ -1,5 +1,5 @@
 <?php
-namespace In2code\In2publishCore\Database\Backend\Adapter;
+namespace In2code\In2publishCore\Record\Backend\Adapter;
 
 /***************************************************************
  * Copyright notice
@@ -26,6 +26,8 @@ namespace In2code\In2publishCore\Database\Backend\Adapter;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use In2code\In2publishCore\Record\Query\RecordSelectQuery;
+
 /**
  * Interface DatabaseAdapterInterface
  */
@@ -37,4 +39,10 @@ interface BackendAdapterInterface
      * @param object $connection Actual backend
      */
     public function __construct($connection);
+
+    /**
+     * @param RecordSelectQuery $recordSelectQuery
+     * @return array
+     */
+    public function select(RecordSelectQuery $recordSelectQuery);
 }

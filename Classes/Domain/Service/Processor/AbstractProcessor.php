@@ -26,6 +26,8 @@ namespace In2code\In2publishCore\Domain\Service\Processor;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use In2code\In2publishCore\Domain\Model\RecordInterface;
+use In2code\In2publishCore\Record\Query\RecordSelectQuery;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -159,5 +161,18 @@ abstract class AbstractProcessor implements ProcessorInterface
     protected function getImportantFields()
     {
         return array_merge($this->required, $this->allowed);
+    }
+
+    /**
+     * @param RecordInterface $record
+     * @param array $column
+     * @return RecordSelectQuery
+     *
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function createQuery(RecordInterface $record, array $column)
+    {
+        throw new \Exception(__CLASS__ . ' can hold relations, createQuery() must be implemented', 1495183462);
     }
 }

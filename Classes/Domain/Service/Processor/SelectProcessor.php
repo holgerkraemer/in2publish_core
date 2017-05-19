@@ -25,6 +25,9 @@ namespace In2code\In2publishCore\Domain\Service\Processor;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use In2code\In2publishCore\Domain\Model\RecordInterface;
+use TYPO3\CMS\Core\Database\Query\Expression\CompositeExpression;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 /**
  * Class SelectProcessor
@@ -70,4 +73,13 @@ class SelectProcessor extends AbstractProcessor
         self::MM_OPPOSITE_FIELD,
         self::ROOT_LEVEL,
     );
+
+
+    public function expandQuery(RecordInterface $record, array $column, QueryBuilder $queryBuilder)
+    {
+        $value = $record->getLocalProperty($column['propertyName']);
+
+        $queryBuilder->orWhere(['uid' => $value]);
+//        $queryBuilder->orWhere(new CompositeExpression(CompositeExpression::TYPE_AND, ['uid' => $value]));
+    }
 }

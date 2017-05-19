@@ -25,6 +25,8 @@ namespace In2code\In2publishCore\Domain\Service\Processor;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use In2code\In2publishCore\Domain\Model\RecordInterface;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 /**
  * Class RadioProcessor

@@ -1,5 +1,5 @@
 <?php
-namespace In2code\In2publishCore\Database\Backend\Adapter;
+namespace In2code\In2publishCore\Record\Backend\Adapter;
 
 /***************************************************************
  * Copyright notice
@@ -26,22 +26,22 @@ namespace In2code\In2publishCore\Database\Backend\Adapter;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\DatabaseConnection;
 
 /**
- * Adapter for Doctrine DBAL
+ * Adapter for the good ol' TYPO3_DB
  */
-class DbalAdapter implements BackendAdapterInterface
+class DbcAdapter implements BackendAdapterInterface
 {
     /**
-     * @var Connection
+     * @var DatabaseConnection
      */
     protected $connection = null;
 
     /**
      * DbalAdapter constructor.
      *
-     * @param Connection $connection
+     * @param DatabaseConnection $connection
      */
     public function __construct($connection)
     {

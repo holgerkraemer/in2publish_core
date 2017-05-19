@@ -1,10 +1,10 @@
 <?php
-namespace In2code\In2publishCore\Database\Query;
+namespace In2code\In2publishCore\Controller;
 
 /***************************************************************
  * Copyright notice
  *
- * (c) 2017 in2code.de and the following authors:
+ * (c) 2016 in2code.de and the following authors:
  * Oliver Eglseder <oliver.eglseder@in2code.de>
  *
  * All rights reserved
@@ -26,38 +26,27 @@ namespace In2code\In2publishCore\Database\Query;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use In2code\In2publishCore\Record\RecordRepository;
+use In2code\In2publishCore\Utility\BackendUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+
 /**
- * Class RecordQuery
+ * Class OverviewController
  */
-class RecordSelectQuery
+class OverviewController extends ActionController
 {
     /**
-     * @var string
-     */
-    protected $table = '';
-
-    /**
-     * @var array
-     */
-    protected $identifier = [];
-
-    /**
-     * RecordQuery constructor.
      *
-     * @param string $table
-     * @param array $identifier
      */
-    public function __construct($table, array $identifier)
+    public function showAction()
     {
-        $this->table = $table;
-        $this->identifier = $identifier;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTable()
-    {
-        return $this->table;
+        $recordRepository = GeneralUtility::makeInstance(RecordRepository::class);
+        $records = $recordRepository->findRecords('pages', BackendUtility::getPageIdentifier());
+        if (count($records) === 1) {
+            $this->view->assign('record', reset($records));
+        } else {
+            throw new \Exception('The selected record could not be found', 1495183921);
+        }
     }
 }
